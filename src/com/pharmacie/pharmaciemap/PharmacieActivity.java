@@ -27,6 +27,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -56,7 +57,7 @@ public class PharmacieActivity extends Activity {
 			Marker marker = map.addMarker(new MarkerOptions().position(pharmacie.getLocation())
 					.title(pharmacie.getTitle())
 					.draggable(true)
-					.alpha(0.7f));
+					.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
 			hashMap.put(pharmacie.getLocation(), pharmacie);
 		}
         
