@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.WeakHashMap;
 
@@ -25,6 +26,7 @@ import android.widget.TextView;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -78,20 +80,23 @@ public class PharmacieActivity extends Activity {
 			public boolean onMarkerClick(Marker marker) {
 				// TODO Auto-generated method stub
 				Pharmacie pharmacie = hashMap.get(marker.getPosition());
-				TextView tv =(TextView) findViewById(R.id.textView);
-				if(pharmacie != null) {
-					tv.setText(pharmacie.getTitle());
-				}
-				else {
-					LatLng position = marker.getPosition();
-					tv.setText("Latitude: "+ position.latitude +
-							" Longitude: "+position.longitude);
-				}
 				
 				CameraUpdate update = CameraUpdateFactory.newLatLngZoom(pharmacie.getLocation(), 17);
 			    map.animateCamera(update);
-					
+				marker.showInfoWindow();
 				return true;
+			}
+		});
+        
+        map.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
+			
+			@Override
+			public void onInfoWindowClick(Marker marker) {
+				// TODO Auto-generated method stub
+				Pharmacie pharmacie = hashMap.get(marker.getPosition());
+				TextView tv =(TextView) findViewById(R.id.textView);
+				tv.setText(pharmacie.getTitle());
+				
 			}
 		});
     }
@@ -106,13 +111,16 @@ public class PharmacieActivity extends Activity {
 
     private void remplirListePharmacies() {
     	try {
-    		File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "pharmacie.xml");
-			FileInputStream fileInput = new FileInputStream(file);
+    		// Si notre fichier pharmacie est un fichier externe qui se trouve sur la carte SD.
+    		//File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "pharmacie.xml");
+    		InputStream in = getResources().openRawResource(R.raw.pharmacie);
+    		//FileInputStream fileInput = new FileInputStream(file);
 			
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			
-			Document doc = db.parse(fileInput);
+			//Document doc = db.parse(fileInput);
+			Document doc = db.parse(in);
 			Element element =  doc.getDocumentElement();
 			
 			listPharmacie.clear();
