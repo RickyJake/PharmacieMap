@@ -150,6 +150,7 @@ public class PharmacieActivity extends Activity {
         for (Pharmacie pharmacie : listPharmacie) {
 			Marker marker = map.addMarker(new MarkerOptions().position(pharmacie.getLocation())
 					.title(pharmacie.getLieu().getTitle())
+					.snippet("Pour plus d'information, cliquez ici...")
 					.draggable(true)
 					.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
 			hashMap.put(pharmacie.getLocation(), pharmacie);
@@ -161,7 +162,6 @@ public class PharmacieActivity extends Activity {
 			public boolean onMarkerClick(Marker marker) {
 				// TODO Auto-generated method stub
 				Pharmacie pharmacie = hashMap.get(marker.getPosition());
-				
 				CameraUpdate update = CameraUpdateFactory.newLatLngZoom(pharmacie.getLocation(), 17);
 			    map.animateCamera(update);
 				marker.showInfoWindow();
