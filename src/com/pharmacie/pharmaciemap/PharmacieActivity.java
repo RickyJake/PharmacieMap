@@ -39,8 +39,6 @@ public class PharmacieActivity extends Activity {
 	private ArrayList<Pharmacie> listPharmacie;
 	private WeakHashMap<LatLng, Pharmacie> hashMap;
 	private int typeView = GoogleMap.MAP_TYPE_HYBRID;
-	//private final LatLng LOCATION = new LatLng(49.27645, -122.917587);
-	//private final LatLng LOC = new LatLng(49.187500, -122.849000);
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,66 +46,14 @@ public class PharmacieActivity extends Activity {
     	
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        
-        //getActionBar().setDisplayHomeAsUpEnabled(true);
-        
         remplirListePharmacies();
         
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
         hashMap = new WeakHashMap<LatLng, Pharmacie>();
         
-        for (Pharmacie pharmacie : listPharmacie) {
-			Marker marker = map.addMarker(new MarkerOptions().position(pharmacie.getLocation())
-					.title(pharmacie.getLieu().getTitle())
-					.draggable(true)
-					.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
-			hashMap.put(pharmacie.getLocation(), pharmacie);
-		}
-        
-        //map.addMarker(new MarkerOptions().position(LOCATION).title("Location!"));
-        //map.addMarker(new MarkerOptions().position(LOC).title("Loc!"));
-        
-        //CameraUpdate update = CameraUpdateFactory.newLatLng(LOCATION);
-        //map.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-        //map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-        //map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-//        map.setMapType(typeView);
-//        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(listPharmacie.get(0).getLocation(), 14);
-//        map.animateCamera(update);
         refreshView();
         
-        map.setOnMarkerClickListener(new OnMarkerClickListener() {
-			
-			@Override
-			public boolean onMarkerClick(Marker marker) {
-				// TODO Auto-generated method stub
-				Pharmacie pharmacie = hashMap.get(marker.getPosition());
-				
-				CameraUpdate update = CameraUpdateFactory.newLatLngZoom(pharmacie.getLocation(), 17);
-			    map.animateCamera(update);
-				marker.showInfoWindow();
-				return true;
-			}
-		});
         
-        map.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
-			
-			@Override
-			public void onInfoWindowClick(Marker marker) {
-				// TODO Auto-generated method stub
-				Pharmacie pharmacie = hashMap.get(marker.getPosition());
-//				TextView tv =(TextView) findViewById(R.id.textView);
-//				tv.setText(pharmacie.getTitle());
-//				Intent intent = new Intent(getBaseContext(), PharmacieInfosActivity.class);
-//				intent.putExtra("titre", pharmacie.getTitle());
-//				intent.putExtra("info", pharmacie.getSummary());
-//				startActivity(intent);
-				
-				Intent intent = new Intent(getBaseContext(), PharmacieInfosActivity.class);
-				intent.putExtra("com.pharmacie.pharmaciemap.Lieu", pharmacie.getLieu());
-				startActivity(intent);
-			}
-		});
     }
     
     @Override
@@ -200,6 +146,40 @@ public class PharmacieActivity extends Activity {
     	map.setMapType(typeView);
         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(listPharmacie.get(0).getLocation(), 14);
         map.animateCamera(update);
+        map.clear();
+        for (Pharmacie pharmacie : listPharmacie) {
+			Marker marker = map.addMarker(new MarkerOptions().position(pharmacie.getLocation())
+					.title(pharmacie.getLieu().getTitle())
+					.draggable(true)
+					.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
+			hashMap.put(pharmacie.getLocation(), pharmacie);
+		}
+        
+        map.setOnMarkerClickListener(new OnMarkerClickListener() {
+			
+			@Override
+			public boolean onMarkerClick(Marker marker) {
+				// TODO Auto-generated method stub
+				Pharmacie pharmacie = hashMap.get(marker.getPosition());
+				
+				CameraUpdate update = CameraUpdateFactory.newLatLngZoom(pharmacie.getLocation(), 17);
+			    map.animateCamera(update);
+				marker.showInfoWindow();
+				return true;
+			}
+		});
+        
+        map.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
+			
+			@Override
+			public void onInfoWindowClick(Marker marker) {
+				// TODO Auto-generated method stub
+				Pharmacie pharmacie = hashMap.get(marker.getPosition());
+				Intent intent = new Intent(getBaseContext(), PharmacieInfosActivity.class);
+				intent.putExtra("com.pharmacie.pharmaciemap.Lieu", pharmacie.getLieu());
+				startActivity(intent);
+			}
+		});
     }
    
 }
