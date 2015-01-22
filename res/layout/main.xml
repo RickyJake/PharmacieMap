@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context="com.pharmacie.pharmaciemap.PharmacieActivity" >
 
     <!-- <TextView
@@ -9,16 +9,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/hello_world" /> -->
-    <!-- <LinearLayout 
+    <LinearLayout 
         android:id="@+id/Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"> -->
+        android:orientation="horizontal"> 
         
     <Button 
         android:id="@+id/buttonNormal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:text="Normal"
         android:onClick="clickNormal"
         android:textSize="16dp"/>
@@ -27,7 +28,7 @@
         android:id="@+id/buttonTerrain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/buttonNormal"
+        android:layout_weight="1"
         android:text="Terrain"
         android:onClick="clickTerrain"
         android:textSize="16dp"/>
@@ -36,7 +37,7 @@
         android:id="@+id/buttonSatellite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/buttonTerrain"
+        android:layout_weight="1"
         android:text="Satellite"
         android:onClick="clickSatellite"
         android:textSize="16dp"/>
@@ -45,20 +46,19 @@
         android:id="@+id/buttonHybrid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/buttonSatellite"
+        android:layout_weight="1"
         android:text="Hybrid"
         android:layout_alignParentRight="true"
         android:onClick="clickHybrid"
         android:textSize="16dp"/>
         
-   <!--  </LinearLayout> -->
-    
+   </LinearLayout>
     
     <fragment
-          android:id="@+id/map"
-          android:layout_below="@+id/buttonNormal"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:name="com.google.android.gms.maps.MapFragment"/>
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.MapFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/Button" />
 
 </RelativeLayout>

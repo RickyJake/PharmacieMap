@@ -1,13 +1,9 @@
 package com.pharmacie.pharmaciemap;
 
-import java.io.Serializable;
-
 import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Lieu implements Parcelable{
-	
-	private static final long serialVersionUID = 1L;
 	
 	private String title;
 	
