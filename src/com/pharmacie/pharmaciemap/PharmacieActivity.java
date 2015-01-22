@@ -1,7 +1,5 @@
 package com.pharmacie.pharmaciemap;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,10 +16,10 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.Menu;
-import android.widget.TextView;
+import android.view.View;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -40,8 +38,9 @@ public class PharmacieActivity extends Activity {
 	private GoogleMap map;
 	private ArrayList<Pharmacie> listPharmacie;
 	private WeakHashMap<LatLng, Pharmacie> hashMap;
-	private final LatLng LOCATION = new LatLng(49.27645, -122.917587);
-	private final LatLng LOC = new LatLng(49.187500, -122.849000);
+	private int typeView = GoogleMap.MAP_TYPE_HYBRID;
+	//private final LatLng LOCATION = new LatLng(49.27645, -122.917587);
+	//private final LatLng LOC = new LatLng(49.187500, -122.849000);
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +49,8 @@ public class PharmacieActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
+        //getActionBar().setDisplayHomeAsUpEnabled(true);
+        
         remplirListePharmacies();
         
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
@@ -57,7 +58,7 @@ public class PharmacieActivity extends Activity {
         
         for (Pharmacie pharmacie : listPharmacie) {
 			Marker marker = map.addMarker(new MarkerOptions().position(pharmacie.getLocation())
-					.title(pharmacie.getTitle())
+					.title(pharmacie.getLieu().getTitle())
 					.draggable(true)
 					.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
 			hashMap.put(pharmacie.getLocation(), pharmacie);
@@ -70,9 +71,10 @@ public class PharmacieActivity extends Activity {
         //map.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
         //map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
         //map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(listPharmacie.get(0).getLocation(), 14);
-        map.animateCamera(update);
+//        map.setMapType(typeView);
+//        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(listPharmacie.get(0).getLocation(), 14);
+//        map.animateCamera(update);
+        refreshView();
         
         map.setOnMarkerClickListener(new OnMarkerClickListener() {
 			
@@ -94,12 +96,24 @@ public class PharmacieActivity extends Activity {
 			public void onInfoWindowClick(Marker marker) {
 				// TODO Auto-generated method stub
 				Pharmacie pharmacie = hashMap.get(marker.getPosition());
-				TextView tv =(TextView) findViewById(R.id.textView);
-				tv.setText(pharmacie.getTitle());
+//				TextView tv =(TextView) findViewById(R.id.textView);
+//				tv.setText(pharmacie.getTitle());
+//				Intent intent = new Intent(getBaseContext(), PharmacieInfosActivity.class);
+//				intent.putExtra("titre", pharmacie.getTitle());
+//				intent.putExtra("info", pharmacie.getSummary());
+//				startActivity(intent);
 				
+				Intent intent = new Intent(getBaseContext(), PharmacieInfosActivity.class);
+				intent.putExtra("com.pharmacie.pharmaciemap.Lieu", pharmacie.getLieu());
+				startActivity(intent);
 			}
 		});
     }
+    
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+    	super.onSaveInstanceState(outState);
+    };
 
 
     @Override
@@ -140,8 +154,8 @@ public class PharmacieActivity extends Activity {
 					LatLng localisation = new LatLng(Double.parseDouble(location[0]), 
 							Double.parseDouble(location[1]));
 					
-					Pharmacie pharmacie = new Pharmacie(Integer.parseInt(id.getFirstChild().getNodeValue()), 
-							title.getFirstChild().getNodeValue(), "", localisation );
+					Pharmacie pharmacie = new Pharmacie(new Lieu(Integer.parseInt(id.getFirstChild().getNodeValue()), 
+							title.getFirstChild().getNodeValue(), ""), localisation );
 					
 					listPharmacie.add(pharmacie);
 				}
@@ -160,6 +174,32 @@ public class PharmacieActivity extends Activity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+    }
+    
+    public void clickNormal(View v) {
+    	typeView = GoogleMap.MAP_TYPE_NORMAL;
+    	refreshView();
+    }
+    
+    public void clickSatellite(View v) {
+    	typeView = GoogleMap.MAP_TYPE_SATELLITE;
+    	refreshView();
+    }
+    
+    public void clickTerrain(View v) {
+    	typeView = GoogleMap.MAP_TYPE_TERRAIN;
+    	refreshView();
+    }
+    
+    public void clickHybrid(View v) {
+    	typeView = GoogleMap.MAP_TYPE_HYBRID;
+    	refreshView();
+    }
+    
+    private void refreshView() {
+    	map.setMapType(typeView);
+        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(listPharmacie.get(0).getLocation(), 14);
+        map.animateCamera(update);
     }
    
 }

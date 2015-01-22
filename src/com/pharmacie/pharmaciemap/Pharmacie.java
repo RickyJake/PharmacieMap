@@ -6,20 +6,14 @@ public class Pharmacie {
 	
 	private LatLng location;
 	
-	private String title;
-	
-	private String summary;
-	
-	private int id;
+	private Lieu lieu;
 	
 	public Pharmacie() {
 		
 	}
 	
-	public Pharmacie(int id, String title, String summary, LatLng location) {
-		this.id = id;
-		this.title = title;
-		this.summary = summary;
+	public Pharmacie(Lieu lieu, LatLng location) {
+		this.lieu = lieu;
 		this.location = location;
 	}
 
@@ -31,29 +25,14 @@ public class Pharmacie {
 		this.location = location;
 	}
 
-	public String getTitle() {
-		return title;
+	public Lieu getLieu() {
+		return lieu;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public void setLieu(Lieu lieu) {
+		this.lieu = lieu;
 	}
 
-	public String getSummary() {
-		return summary;
-	}
-
-	public void setSummary(String summary) {
-		this.summary = summary;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
 	
 	
 

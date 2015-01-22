@@ -22,7 +22,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@android:style/Theme.Holo.Light" >
         
         <meta-data
     		android:name="com.google.android.gms.version"
@@ -40,6 +40,17 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".PharmacieInfosActivity"
+            android:label="Informations"
+            android:parentActivityName=".PharmacieActivity">
+            
+            <meta-data 
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".PharmacieActivity"/>
+            
+            
         </activity>
     </application>
 
