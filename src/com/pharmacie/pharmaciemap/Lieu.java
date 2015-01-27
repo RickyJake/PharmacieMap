@@ -11,6 +11,8 @@ public class Lieu implements Parcelable{
 	
 	private int id;
 	
+	private Produit produit;
+	
 	public Lieu() {;};
 	
 	public Lieu(Parcel in) {
@@ -47,6 +49,14 @@ public class Lieu implements Parcelable{
 		this.id = id;
 	}
 
+	public Produit getProduit() {
+		return produit;
+	}
+
+	public void setProduit(Produit produit) {
+		this.produit = produit;
+	}
+
 	@Override
 	public int describeContents() {
 		// TODO Auto-generated method stub
@@ -59,6 +69,7 @@ public class Lieu implements Parcelable{
 		dest.writeInt(id);
 		dest.writeString(title);
 		dest.writeString(summary);
+		dest.writeParcelable(produit, flags);
 	}
 	
 	public static final Parcelable.Creator CREATOR =
@@ -79,6 +90,7 @@ public class Lieu implements Parcelable{
 		id = in.readInt();
 		title = in.readString();
 		summary = in.readString();
+		produit = in.readParcelable(Produit.class.getClassLoader());
 	}
 	
 	
